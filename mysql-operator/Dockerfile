@@ -8,13 +8,14 @@ ARG MYSQL_SHELL_REPO="mysql-tools-community"
 
 FROM oraclelinux:8 AS pip-stage
 
-
 RUN dnf install -y python39
 RUN dnf install -y python39-pip
 
 COPY requirements.txt .
 
 RUN pip3 install --target=/tmp/site-packages -r requirements.txt
+
+FROM mysql/mysql-operator:${MYSQL_SHELL_VERSION}-${MYSQL_OPERATOR_VERSION} as operator
 
 FROM oraclelinux:8-slim AS mysql-operator
 ARG MYSQL_REPO_URL
@@ -35,7 +36,7 @@ RUN groupadd -g27 mysql && useradd -u27 -g27 mysql
 
 RUN mkdir /mysqlsh && chown 2 /mysqlsh
 
-COPY --from=mysql/mysql-operator:$MYSQL_SHELL_VERSION-$MYSQL_OPERATOR_VERSION /usr/lib/mysqlsh/python-packages/mysqloperator /usr/lib/mysqlsh/python-packages/mysqloperator
+COPY --from=operator /usr/lib/mysqlsh/python-packages/mysqloperator /usr/lib/mysqlsh/python-packages/mysqloperator
 
 # Workaround for BC issue with newest Python library for Kubernetes
 # See move here: https://github.com/kubernetes-client/python/issues/1718

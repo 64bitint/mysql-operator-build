@@ -66,6 +66,10 @@ jobs:
       - name: Set operator version env
         run: echo "MYSQL_OPERATOR_VERSION=${TAG#*-}" >> $GITHUB_ENV
 
+      - name: Get Operator Docker Tag
+        id: operator-tag
+        run: echo "tag=$REGISTRY/$IMAGE_NAME_OPERATOR:${MYSQL_SHELL_VERSION}-${MYSQL_OPERATOR_VERSION}"
+
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
       - name: Extract Docker metadata
@@ -84,7 +88,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           #tags: "64bitint/mysql-operator:8.0.31-2.0.7"
           #tags: ${{ steps.meta.outputs.tags }}
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_OPERATOR }}:${{ env.MYSQL_SHELL_VERSION }}-${{ env.MYSQL_OPERATOR_VERSION }}
+          tags: ${{ steps.operator-tag.outputs.tag }}
           labels: ${{ steps.meta-operator.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -93,6 +97,10 @@ jobs:
             MYSQL_SHELL_VERSION=${{ env.MYSQL_SHELL_VERSION }}
             MYSQL_OPERATOR_VERSION=${{ env.MYSQL_OPERATOR_VERSION }}
                 
+      - name: Get Router Docker Tag
+        id: router-tag
+        run: echo "tag=$REGISTRY/$IMAGE_NAME_ROUTER:${MYSQL_SHELL_VERSION}"
+      
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
       - name: Extract Docker metadata
@@ -103,7 +111,7 @@ jobs:
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
-      - name: Build and push Docker mysql-operator image
+      - name: Build and push Docker mysql-router image
         id: build-and-push-router
         uses: docker/build-push-action@v3
         with:
@@ -111,7 +119,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           #tags: "64bitint/mysql-operator:8.0.31-2.0.7"
           #tags: ${{ steps.meta.outputs.tags }}
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_ROUTER }}:${{ env.MYSQL_SHELL_VERSION }}
+          tags: {{ steps.router-tag.outputs.tag }}
           labels: ${{ steps.meta-router.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

@@ -68,7 +68,7 @@ jobs:
 
       - name: Get Operator Docker Tag
         id: operator-tag
-        run: echo "tag=$REGISTRY/$IMAGE_NAME_OPERATOR:${MYSQL_SHELL_VERSION}-${MYSQL_OPERATOR_VERSION}"
+        run: echo "tag=$REGISTRY/$IMAGE_NAME_OPERATOR:${MYSQL_SHELL_VERSION}-${MYSQL_OPERATOR_VERSION}" >> $GITHUB_OUTPUT
 
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
@@ -99,7 +99,7 @@ jobs:
                 
       - name: Get Router Docker Tag
         id: router-tag
-        run: echo "tag=$REGISTRY/$IMAGE_NAME_ROUTER:${MYSQL_SHELL_VERSION}"
+        run: echo "tag=$REGISTRY/$IMAGE_NAME_ROUTER:${MYSQL_SHELL_VERSION}" >> $GITHUB_OUTPUT
       
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action

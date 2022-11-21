@@ -19,9 +19,9 @@ env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
-  IMAGE_NAME_OPERATOR: ${{ github.repository }%/*}mysql-operator 
-  IMAGE_NAME_ROUTER: mysql-router
-  IMAGE_NAME_SERVER: mysql-server
+  IMAGE_NAME_OPERATOR: ${{ github.actor }}/mysql-operator 
+  IMAGE_NAME_ROUTER: ${{ github.actor }}/mysql-router
+  IMAGE_NAME_SERVER: ${{ github.actor }}/mysql-server
 
 
 jobs:

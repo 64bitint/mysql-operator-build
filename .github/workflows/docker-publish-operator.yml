@@ -134,4 +134,4 @@ jobs:
         run: |
           curl -L https://github.com/regclient/regclient/releases/latest/download/regctl-linux-amd64 >regctl
           chmod 755 regctl
-          regctl image copy mysql/mysql-server:${{ env.MYSQL_SHELL_VERSION }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_SERVER }}:${{ env.MYSQL_SHELL_VERSION }}
+          ./regctl image copy mysql/mysql-server:${{ env.MYSQL_SHELL_VERSION }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_SERVER }}:${{ env.MYSQL_SHELL_VERSION }}

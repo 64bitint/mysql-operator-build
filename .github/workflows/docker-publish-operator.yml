@@ -6,7 +6,7 @@ name: Docker
 # documentation.
 
 on:
-  schedule:
+#  schedule:
 #    - cron: '18 12 * * *'
   push:
 #    branches: [ "trunk" ]
@@ -26,7 +26,6 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -34,6 +33,7 @@ jobs:
       # This is used to complete the identity challenge
       # with sigstore/fulcio when running outside of PRs.
       id-token: write
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -59,8 +59,10 @@ jobs:
 
       - name: Set Tag Env
         run: echo "TAG=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
+      
       - name: Set mysql version env
         run: echo "MYSQL_SHELL_VERSION=${TAG%-*}" >> $GITHUB_ENV
+      
       - name: Set operator version env
         run: echo "MYSQL_OPERATOR_VERSION=${TAG#*-}" >> $GITHUB_ENV
 
@@ -90,7 +92,7 @@ jobs:
           build-args:
             MYSQL_SHELL_VERSION: ${{ env.MYSQL_SHELL_VERSION }}
             MYSQL_OPERATOR_VERSION: ${{ env.MYSQL_OPERATOR_VERSION }}
-
+                
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
       - name: Extract Docker metadata
@@ -118,9 +120,9 @@ jobs:
             MYSQL_SHELL_VERSION: ${{ env.MYSQL_SHELL_VERSION }}
             MYSQL_OPERATOR_VERSION: ${{ env.MYSQL_OPERATOR_VERSION }}
 
-       - name: Copy mysql server image
-         id: pull-and-push-server
-         run: |
-           curl -L https://github.com/regclient/regclient/releases/latest/download/regctl-linux-amd64 >regctl
-           chmod 755 regctl
-           regctl image copy mysql/mysql-server:${{ env.MYSQL_SHELL_VERSION }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_SERVER }}:${{ env.MYSQL_SHELL_VERSION }}
+      - name: Copy mysql server image
+        id: pull-and-push-server
+        run: |
+          curl -L https://github.com/regclient/regclient/releases/latest/download/regctl-linux-amd64 >regctl
+          chmod 755 regctl
+          regctl image copy mysql/mysql-server:${{ env.MYSQL_SHELL_VERSION }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_SERVER }}:${{ env.MYSQL_SHELL_VERSION }}

@@ -89,9 +89,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
-          build-args:
-            MYSQL_SHELL_VERSION: ${{ env.MYSQL_SHELL_VERSION }}
-            MYSQL_OPERATOR_VERSION: ${{ env.MYSQL_OPERATOR_VERSION }}
+          build-args: |
+            MYSQL_SHELL_VERSION=${{ env.MYSQL_SHELL_VERSION }}
+            MYSQL_OPERATOR_VERSION=${{ env.MYSQL_OPERATOR_VERSION }}
                 
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
@@ -116,9 +116,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
-          build-args:
-            MYSQL_SHELL_VERSION: ${{ env.MYSQL_SHELL_VERSION }}
-            MYSQL_OPERATOR_VERSION: ${{ env.MYSQL_OPERATOR_VERSION }}
+          build-args: |
+            MYSQL_SHELL_VERSION=${{ env.MYSQL_SHELL_VERSION }}
+            MYSQL_OPERATOR_VERSION=${{ env.MYSQL_OPERATOR_VERSION }}
 
       - name: Copy mysql server image
         id: pull-and-push-server
